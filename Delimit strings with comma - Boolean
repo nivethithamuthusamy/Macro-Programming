@@ -1,0 +1,26 @@
+
+Sub iterateThroughAll()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
+
+    Dim lastCol As Long
+    Dim lastRow As Long
+
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    
+    Dim derivatesArray() As String
+    Dim arr_derivates As Variant
+    arr_derivates = Array("G01", "G02", "G03", "F01", "F02", "F03")
+    
+    For rrow = 1 To lastRow
+        derivatesArray = Split(Range("A" + CStr(rrow + 1)).Value, ",")
+        For i = LBound(derivatesArray) To UBound(derivatesArray)
+            For x = LBound(arr_derivates) To UBound(arr_derivates)
+                If Trim(derivatesArray(i)) = arr_derivates(x) Then
+                        Cells(rrow + 1, x + 2).Value = "1"
+                End If
+            Next
+        Next i
+    Next
+End Sub

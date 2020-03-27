@@ -1,0 +1,50 @@
+Private Type student
+    name As String
+    subject As String
+    total As String
+End Type
+
+
+Sub iterateThroughAll()
+    
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
+    
+    Dim lastCol As Long
+    Dim lastRow As Long
+    
+    lastRow = ws.Cells(ws.Rows.count, "A").End(xlUp).Row
+    
+    'Debug.Print "Last Row ", (lastRow)
+    
+    Dim students(100) As student
+    
+    For rrow = 1 To lastRow
+        lastCol = ws.Cells(rrow, Columns.count).End(xlToLeft).Column
+        'Debug.Print "Last Col ", (lastcol)
+        students(rrow).name = ws.Cells(rrow, 1).Value
+        For ccol = 2 To lastCol
+            If ws.Cells(rrow, ccol).Value <> "" Then
+                'Debug.Print ws.Cells(rrow, ccol)
+                If students(rrow).subject = "" Then
+                    students(rrow).subject = ws.Cells(rrow, ccol)
+                Else
+                    students(rrow).total = ws.Cells(rrow, ccol)
+                End If
+            End If
+        Next
+    Next
+    
+    Dim emptyStudent As student
+    For i = 1 To lastRow
+        If students(i).name = students(i + 1).name And students(i).subject = students(i + 1).subject Then
+            students(i) = emptyStudent
+        End If
+    Next
+    
+    For i = 1 To lastRow
+        If students(i).name <> "" Then
+            Debug.Print students(i).name, students(i).subject, students(i).total
+        End If
+    Next
+End Sub

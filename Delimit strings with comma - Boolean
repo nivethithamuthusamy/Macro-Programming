@@ -1,24 +1,30 @@
-
 Sub iterateThroughAll()
     Dim ws As Worksheet
     Set ws = ActiveSheet
 
     Dim lastCol As Long
     Dim lastRow As Long
-
-    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
-    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    Dim ColumnLetter As String
     
+    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    lastRow = ws.Cells(ws.Rows.Count, lastCol).End(xlUp).Row
+    
+    'Convert To Column Letter
+    ColumnLetter = Split(Cells(1, lastCol).Address, "$")(1)
     Dim derivatesArray() As String
     Dim arr_derivates As Variant
-    arr_derivates = Array("G01", "G02", "G03", "F01", "F02", "F03")
+    arr_derivates = Array("F90", "F91", "F92", "F93", "F95", "F96", "F97", "F98", "G01", "G02", "G05", "G06", "G07", "G08", "G09", "G11", "G12", "G14", "G15", "G16", "G18", "G20", "G21", "G22", "G23", "G26", "G28", "G30", "G31", "G32", "G38", "G42", "G80", "G81", "G82", "G83", "G87")
+    'Insert new columns with the heading
+    For c = 0 To 36
+        Cells(1, lastCol + c + 1).Value = arr_derivates(c)
+    Next
     
     For rrow = 1 To lastRow
-        derivatesArray = Split(Range("A" + CStr(rrow + 1)).Value, ",")
+        derivatesArray = Split(Range(ColumnLetter + CStr(rrow + 1)).Value, ",")
         For i = LBound(derivatesArray) To UBound(derivatesArray)
             For x = LBound(arr_derivates) To UBound(arr_derivates)
                 If Trim(derivatesArray(i)) = arr_derivates(x) Then
-                        Cells(rrow + 1, x + 2).Value = "1"
+                        Cells(rrow + 1, x + lastCol + 1).Value = "1"
                 End If
             Next
         Next i
